@@ -13,7 +13,7 @@ const V3=(x,y,z)=>new THREE.Vector3(x,y,z);
 const host=$('#three');
 let renderer;
 try{ renderer=new THREE.WebGLRenderer({antialias:true}); }
-catch(e){ host.innerHTML='<div class="empty" style="padding:40px">WebGL is not available in this browser, so the 3D bench can\'t start. Try Chrome, Edge or Firefox with hardware acceleration on, or open <a href="pc-assembly-2d.html" style="color:#4fc3f7">the 2D version</a>.</div>'; throw e; }
+catch(e){ host.innerHTML='<div class="empty" style="padding:40px">WebGL is not available in this browser, so the 3D bench can\'t start. Try Chrome, Edge or Firefox with hardware acceleration on, or open <a href="2d/index.html" style="color:#4fc3f7">the 2D version</a>.</div>'; throw e; }
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
@@ -39,7 +39,10 @@ const fill=new THREE.DirectionalLight(0xb9d4ff,.7); fill.position.set(-60,40,40)
 const inner=new THREE.PointLight(0xfff1e0,260,90,1.6);inner.position.set(26,38,34);scene.add(inner);
 const lamp=new THREE.SpotLight(0xffd9a8,900,140,.6,.5,1.6); lamp.position.set(70,70,40); lamp.target.position.set(60,0,8); scene.add(lamp,lamp.target);
 
-function resize(){const r=host.getBoundingClientRect();renderer.setSize(r.width,r.height,false);renderer.domElement.style.width=r.width+'px';renderer.domElement.style.height=r.height+'px';camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix()}
+function resize(){const r=host.getBoundingClientRect();renderer.setSize(r.width,r.height,false);renderer.domElement.style.width=r.width+'px';renderer.domElement.style.height=r.height+'px';camera.aspect=r.width/Math.max(1,r.height);
+  /* on narrow (portrait) screens keep the horizontal field of view, so step views still fit the shot */
+  const A0=1.1, t=Math.tan(THREE.MathUtils.degToRad(18));
+  camera.fov=camera.aspect<A0?THREE.MathUtils.radToDeg(2*Math.atan(t*A0/camera.aspect)):36;camera.updateProjectionMatrix()}
 new ResizeObserver(resize).observe(host); resize();
 
 /* ---------- procedural textures ---------- */

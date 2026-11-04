@@ -242,8 +242,10 @@ let D=null, overZone=null;
 function startDrag(e,id,src){
   e.preventDefault();
   D={id,src,x0:e.clientX,y0:e.clientY,moved:false,ghost:null};
-  window.addEventListener('pointermove',onMove);window.addEventListener('pointerup',onUp,{once:true});
+  window.addEventListener('pointermove',onMove);window.addEventListener('pointerup',onUp,{once:true});window.addEventListener('pointercancel',onCancel,{once:true});
 }
+/* touch: the browser took the gesture over (e.g. tray scroll), so drop nothing and clean up */
+function onCancel(){window.removeEventListener('pointermove',onMove);window.removeEventListener('pointerup',onUp);const d=D;D=null;controls.enabled=true;if(d&&d.ghost)d.ghost.remove();setOver(null)}
 function setOver(z){if(overZone===z)return;overZone=z;applyHints()}
 function onMove(e){
   if(!D) return;
@@ -253,19 +255,23 @@ function onMove(e){
   setOver(zoneAt(e.clientX,e.clientY));
 }
 function onUp(e){
-  window.removeEventListener('pointermove',onMove);const d=D;D=null;controls.enabled=true;if(!d)return;setOver(null);
+  window.removeEventListener('pointermove',onMove);window.removeEventListener('pointercancel',onCancel);const d=D;D=null;controls.enabled=true;if(!d)return;setOver(null);
   if(d.moved){d.ghost.remove();handleDrop(d.id,zoneAt(e.clientX,e.clientY))}
   else if(d.src==='tray'){const it=ITEMS[d.id];if(it.rot){it.o=(it.o+1)%it.rot;sfx('tick');renderTray();applyHints()}else info(`Drag the ${it.name.toLowerCase()} onto the 3D bench.`)}
 }
 let down=null;
+const active=new Set(); let multi=false;   // multi-touch (pinch/pan) must never count as a tap
 renderer.domElement.addEventListener('pointerdown',e=>{
+  active.add(e.pointerId); if(active.size>1){multi=true;return}
   if(S.done) return; down={x:e.clientX,y:e.clientY};
   const st=cur();
   if(st&&st.item==='mbAsm'&&mbG.userData.drag&&setRay(e.clientX,e.clientY)&&ray.intersectObject(mbG,true).length){controls.enabled=false;startDrag(e,'mbAsm','scene')}
 },{capture:true});
+renderer.domElement.addEventListener('pointercancel',e=>{active.delete(e.pointerId);if(!active.size){multi=false;down=null}});
 renderer.domElement.addEventListener('pointerup',e=>{
+  active.delete(e.pointerId); if(multi){if(!active.size){multi=false;down=null}return}
   if(!down||S.done) return; const moved=Math.hypot(e.clientX-down.x,e.clientY-down.y); down=null;
-  if(moved>5||D) return;
+  if(moved>(e.pointerType==='touch'?12:5)||D) return;
   const o=clickAt(e.clientX,e.clientY); if(o) handleClick(o.userData.click,o);
 });
 renderer.domElement.addEventListener('pointermove',e=>{if(D||down)return;const o=clickAt(e.clientX,e.clientY);renderer.domElement.style.cursor=o?'pointer':(S.tool?'crosshair':(cur()&&cur().item==='mbAsm'&&mbG.userData.drag?'grab':''))});

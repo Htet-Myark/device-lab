@@ -8,19 +8,21 @@
 </head>
 <body>
 <header>
-  <h1>🛠 <b>PC Lab</b> Assembly <span style="font-size:11px;color:var(--muted)">2D</span></h1>
+  <h1>🛠 <b>PC Lab</b><span class="bt"> Assembly</span> <span style="font-size:11px;color:var(--muted)">2D</span></h1>
+  <div class="stats">
   <div class="stat"><small>PART</small><span id="hPart">1/7</span></div>
   <div class="stat"><small>STEP</small><span id="hStep">1</span></div>
   <div class="stat"><small>TIME</small><span id="hTime">0:00</span></div>
   <div class="stat"><small>MISTAKES</small><span id="hMis">0</span></div>
   <div class="stat"><small>SCORE</small><span id="hScore">1000</span></div>
   <div class="stat" id="hGround">⚡ Not grounded</div>
+  </div>
   <div class="spacer"></div>
-  <button id="bHint" title="Highlight where to go (H)">💡 Hint</button>
+  <button id="bHint" title="Highlight where to go (H)">💡<span class="bt"> Hint</span></button>
   <button id="bMute">🔊</button>
-  <a class="btn" href="../index.html">3D version</a>
-  <button id="bAbout">ⓘ About</button>
-  <button id="bRestart">↺ Restart</button>
+  <a class="btn" href="../index.html">3D<span class="bt"> version</span></a>
+  <button id="bAbout">ⓘ<span class="bt"> About</span></button>
+  <button id="bRestart">↺<span class="bt"> Restart</span></button>
 </header>
 <main>
   <aside id="trayWrap"><h2>Parts &amp; tools</h2><div id="tray"></div></aside>
@@ -29,7 +31,7 @@
     <div class="toast" id="toast"></div>
     <div class="banner" id="banner"><div><small id="bnK"></small><b id="bnT"></b></div></div>
   </section>
-  <aside><h2>Lab procedure</h2><ul class="parts" id="parts"></ul><div class="bar"><i id="prog"></i></div><div id="stepCard"></div></aside>
+  <aside id="procWrap"><h2>Lab procedure</h2><ul class="parts" id="parts"></ul><div class="bar"><i id="prog"></i></div><div id="stepCard"></div></aside>
 </main>
 
 <div class="overlay" id="startO">
@@ -37,9 +39,9 @@
     <h2>🛠 <b>PC Lab</b> Assembly 2D</h2>
     <p>Assemble a desktop PC from a bare case, following a standard 7-part PC assembly lab procedure.</p>
     <ul>
-      <li><b>Drag</b> parts and cables from the left tray onto the bench.</li>
-      <li><b>Click</b> screws, levers, covers and switches when a step asks.</li>
-      <li><b>Click a part in the tray</b> to rotate or flip it. Pin 1, RAM notches and LED polarity matter.</li>
+      <li><b>Drag</b> parts and cables from the parts tray onto the bench.</li>
+      <li><b>Click / tap</b> screws, levers, covers and switches when a step asks.</li>
+      <li><b>Click / tap a part in the tray</b> to rotate or flip it. Pin 1, RAM notches and LED polarity matter.</li>
       <li>Doing steps out of order or making a real-world mistake costs points.</li>
     </ul>
     <div class="row">

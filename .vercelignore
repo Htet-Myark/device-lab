@@ -1,0 +1,6 @@
+.claude
+.git
+_test*
+docs
+.env*
+.vercel

@@ -7,6 +7,13 @@ function startDrag(e,id,src){
   D={id,src,x0:e.clientX,y0:e.clientY,moved:false,ghost:null,over:null};
   window.addEventListener('pointermove',onMove);
   window.addEventListener('pointerup',onUp,{once:true});
+  window.addEventListener('pointercancel',onCancel,{once:true});
+}
+/* touch: the browser took the gesture over (e.g. tray scroll), so drop nothing and clean up */
+function onCancel(){
+  window.removeEventListener('pointermove',onMove); window.removeEventListener('pointerup',onUp);
+  const d=D; D=null; svg.classList.remove('dragging'); if(!d) return;
+  d.over&&d.over.classList.remove('over'); d.ghost&&d.ghost.remove();
 }
 function zoneAt(x,y){for(const e of document.elementsFromPoint(x,y)){if(e.dataset&&e.dataset.zone)return e}return null}
 function onMove(e){
@@ -23,7 +30,7 @@ function onMove(e){
   if(z!==D.over){D.over&&D.over.classList.remove('over');D.over=z;z&&z.classList.add('over')}
 }
 function onUp(e){
-  window.removeEventListener('pointermove',onMove);
+  window.removeEventListener('pointermove',onMove); window.removeEventListener('pointercancel',onCancel);
   const d=D; D=null; svg.classList.remove('dragging'); if(!d) return;
   d.over&&d.over.classList.remove('over');
   if(d.moved){

@@ -89,3 +89,70 @@ svg.dragging .zone{pointer-events:all}
 
 .legal{font-size:11.5px;color:var(--muted);margin:10px 0 0}.legal a{color:var(--accent)}
 #aboutO{z-index:120}#aboutO code{background:#0b1118;padding:1px 5px;border-radius:4px}
+
+/* ===== responsive / touch ===== */
+.stats{display:flex;gap:10px;align-items:center;min-width:0}
+.vh-touch{display:none}
+body{-webkit-tap-highlight-color:transparent}
+@media (pointer:coarse){
+  .vh-mouse{display:none}.vh-touch{display:inline}
+  .ghost{transform:translate(-50%,-125%)} /* keep the dragged part visible above the finger */
+  button,.btn{min-height:34px}
+}
+/* shared compact rules: narrow screens and short landscape phones */
+@media (max-width:900px),(orientation:landscape) and (max-height:500px){
+  html,body{height:100%;height:100dvh}
+  body{display:flex;flex-direction:column}
+  header{height:auto;gap:6px;padding:6px 8px}
+  header h1{font-size:15px;margin:0}
+  .spacer,.bt{display:none}
+  header button,header .btn{padding:5px 9px}
+  .stats{gap:6px;overflow-x:auto;scrollbar-width:none}.stats::-webkit-scrollbar{display:none}
+  .stat{padding:2px 8px;font-size:12px}
+  main{flex:1;min-height:0;height:auto;gap:6px;padding:6px}
+  aside{padding:6px;border-radius:10px}
+  #procWrap h2,#parts{display:none}
+  .bar{margin:0 0 6px}
+  .card{padding:8px 10px}.card h3{font-size:14.5px;margin:2px 0 4px}.card p{font-size:13px;margin-bottom:6px}
+  .titem .ic{flex:0 0 auto;width:64px;height:40px}.titem .ic svg{width:64px;height:40px}
+  .titem .nm{font-size:11.5px;line-height:1.25}
+  .viewhelp{font-size:11px;top:6px;left:6px;max-width:58%;padding:3px 8px}
+  #bView{top:6px;right:6px}
+  .toast{max-width:94%;font-size:12.5px;bottom:8px;padding:7px 10px}
+  .banner div{padding:10px 16px}.banner b{font-size:17px}
+  .modal{padding:16px 18px;max-height:92vh;max-height:92dvh;overflow:auto}
+  .modal h2{font-size:20px}.modal ul{padding-left:18px}.modal p,.modal li{font-size:13.5px}
+  .mode{min-width:0;flex:1 1 220px}
+  .post{min-height:160px;font-size:11px;padding:10px}
+  .results{grid-template-columns:repeat(2,1fr)}
+}
+/* portrait / narrow: step card on top, bench in the middle, tray along the bottom (thumb reach) */
+@media (max-width:900px){
+  header{flex-wrap:wrap}
+  header h1{flex:1 1 auto}
+  .stats{order:2;flex:1 0 100%}
+  main{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"proc" "stage" "tray"}
+  #procWrap{grid-area:proc;max-height:27vh;max-height:27dvh}
+  #stage{grid-area:stage;min-height:180px}
+  #trayWrap{grid-area:tray;overflow-x:auto;overflow-y:hidden}
+  #trayWrap h2{display:none}
+  #tray{display:flex;gap:6px;align-items:stretch}
+  .titem{flex:0 0 96px;flex-direction:column;justify-content:center;margin:0;padding:5px 4px;text-align:center;touch-action:pan-x}
+  .traysec{writing-mode:vertical-rl;transform:rotate(180deg);margin:0;align-self:center;font-size:9.5px}
+  #tray .empty{flex:1 0 240px;padding:6px}
+}
+/* short landscape phones: tray | bench | step card, single-row header */
+@media (orientation:landscape) and (max-height:500px){
+  header{flex-wrap:nowrap}
+  header h1{flex:0 0 auto}
+  .stats{order:0;flex:1 1 auto}
+  main{display:grid;grid-template-columns:118px minmax(0,1fr) 210px;grid-template-rows:minmax(0,1fr);grid-template-areas:"tray stage proc"}
+  #procWrap{grid-area:proc;max-height:none}
+  #stage{grid-area:stage;min-height:0}
+  #trayWrap{grid-area:tray;overflow-y:auto;overflow-x:hidden}
+  #trayWrap h2{display:none}
+  #tray{display:block}
+  .titem{flex-direction:column;width:auto;margin:0 0 6px;padding:4px;text-align:center;touch-action:pan-y}
+  .traysec{writing-mode:horizontal-tb;transform:none;margin:2px 2px 4px;font-size:9.5px}
+  .viewhelp{display:none}
+}

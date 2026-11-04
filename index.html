@@ -11,31 +11,33 @@
 <body>
 <svg id="defsSvg" width="0" height="0" style="position:absolute"></svg>
 <header>
-  <h1>🛠 <b>PC Lab</b> Assembly <span style="font-size:11px;color:var(--muted)">3D</span></h1>
+  <h1>🛠 <b>PC Lab</b><span class="bt"> Assembly</span> <span style="font-size:11px;color:var(--muted)">3D</span></h1>
+  <div class="stats">
   <div class="stat"><small>PART</small><span id="hPart">1/7</span></div>
   <div class="stat"><small>STEP</small><span id="hStep">1</span></div>
   <div class="stat"><small>TIME</small><span id="hTime">0:00</span></div>
   <div class="stat"><small>MISTAKES</small><span id="hMis">0</span></div>
   <div class="stat"><small>SCORE</small><span id="hScore">1000</span></div>
   <div class="stat" id="hGround">⚡ Not grounded</div>
-  <div class="stat" id="hTool">🪛 Holding screwdriver · Esc to put down</div>
+  <div class="stat" id="hTool">🪛 Holding screwdriver<span class="vh-mouse"> · Esc to put down</span></div>
+  </div>
   <div class="spacer"></div>
-  <button id="bHint" title="Highlight where to go (H)">💡 Hint</button>
+  <button id="bHint" title="Highlight where to go (H)">💡<span class="bt"> Hint</span></button>
   <button id="bMute">🔊</button>
-  <a class="btn" href="2d/index.html">2D version</a>
-  <button id="bAbout" title="About, license & disclaimer">ⓘ About</button>
-  <button id="bRestart">↺ Restart</button>
+  <a class="btn" href="2d/index.html">2D<span class="bt"> version</span></a>
+  <button id="bAbout" title="About, license & disclaimer">ⓘ<span class="bt"> About</span></button>
+  <button id="bRestart">↺<span class="bt"> Restart</span></button>
 </header>
 <main>
   <aside id="trayWrap"><h2>Parts &amp; tools</h2><div id="tray"></div></aside>
   <section id="stage">
     <div id="three"></div>
-    <div class="viewhelp">🖱 Drag empty space to orbit · right-drag to pan · scroll to zoom</div>
-    <button id="bView" title="Return the camera to this step (V)">🎥 Step view</button>
+    <div class="viewhelp"><span class="vh-mouse">🖱 Drag empty space to orbit · right-drag to pan · scroll to zoom</span><span class="vh-touch">☝ Drag to orbit · pinch to zoom · two fingers to pan</span></div>
+    <button id="bView" title="Return the camera to this step (V)">🎥<span class="bt"> Step view</span></button>
     <div class="toast" id="toast"></div>
     <div class="banner" id="banner"><div><small id="bnK"></small><b id="bnT"></b></div></div>
   </section>
-  <aside><h2>Lab procedure</h2><ul class="parts" id="parts"></ul><div class="bar"><i id="prog"></i></div><div id="stepCard"></div></aside>
+  <aside id="procWrap"><h2>Lab procedure</h2><ul class="parts" id="parts"></ul><div class="bar"><i id="prog"></i></div><div id="stepCard"></div></aside>
 </main>
 
 <div class="overlay" id="startO">
@@ -43,9 +45,9 @@
     <h2>🛠 <b>PC Lab</b> Assembly 3D</h2>
     <p>Assemble a desktop PC on a 3D workbench, following a standard 7-part PC assembly lab procedure.</p>
     <ul>
-      <li><b>Drag</b> parts and cables from the left tray onto the 3D bench. Valid drop spots light up as you hover.</li>
-      <li><b>Click</b> screws, levers, covers and switches when a step asks.</li>
-      <li><b>Click a part in the tray</b> to rotate or flip it. Pin 1, RAM notches and LED polarity matter.</li>
+      <li><b>Drag</b> parts and cables from the parts tray onto the 3D bench. Valid drop spots light up as you hover.</li>
+      <li><b>Click / tap</b> screws, levers, covers and switches when a step asks.</li>
+      <li><b>Click / tap a part in the tray</b> to rotate or flip it. Pin 1, RAM notches and LED polarity matter.</li>
       <li>The camera moves to each step automatically. Drag empty space to look around, and press <b>V</b> to snap back.</li>
     </ul>
     <div class="row">
