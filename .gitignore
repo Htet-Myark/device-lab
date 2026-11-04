@@ -1,0 +1,5 @@
+# Local tool / editor state
+.claude/
+.vscode/
+*.log
+_test*.html

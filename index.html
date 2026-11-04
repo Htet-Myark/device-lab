@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PC Lab Assembly 3D | Educational PC Building Simulator</title>
+<meta name="description" content="Educational 3D simulation of a PC assembly lab. Not affiliated with Cisco.">
+<link rel="stylesheet" href="assets/css/app.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+</head>
+<body>
+<svg id="defsSvg" width="0" height="0" style="position:absolute"></svg>
+<header>
+  <h1>🛠 <b>PC Lab</b> Assembly <span style="font-size:11px;color:var(--muted)">3D</span></h1>
+  <div class="stat"><small>PART</small><span id="hPart">1/7</span></div>
+  <div class="stat"><small>STEP</small><span id="hStep">1</span></div>
+  <div class="stat"><small>TIME</small><span id="hTime">0:00</span></div>
+  <div class="stat"><small>MISTAKES</small><span id="hMis">0</span></div>
+  <div class="stat"><small>SCORE</small><span id="hScore">1000</span></div>
+  <div class="stat" id="hGround">⚡ Not grounded</div>
+  <div class="stat" id="hTool">🪛 Holding screwdriver · Esc to put down</div>
+  <div class="spacer"></div>
+  <button id="bHint" title="Highlight where to go (H)">💡 Hint</button>
+  <button id="bMute">🔊</button>
+  <a class="btn" href="2d/index.html">2D version</a>
+  <button id="bAbout" title="About, license & disclaimer">ⓘ About</button>
+  <button id="bRestart">↺ Restart</button>
+</header>
+<main>
+  <aside id="trayWrap"><h2>Parts &amp; tools</h2><div id="tray"></div></aside>
+  <section id="stage">
+    <div id="three"></div>
+    <div class="viewhelp">🖱 Drag empty space to orbit · right-drag to pan · scroll to zoom</div>
+    <button id="bView" title="Return the camera to this step (V)">🎥 Step view</button>
+    <div class="toast" id="toast"></div>
+    <div class="banner" id="banner"><div><small id="bnK"></small><b id="bnT"></b></div></div>
+  </section>
+  <aside><h2>Lab procedure</h2><ul class="parts" id="parts"></ul><div class="bar"><i id="prog"></i></div><div id="stepCard"></div></aside>
+</main>
+
+<div class="overlay" id="startO">
+  <div class="modal">
+    <h2>🛠 <b>PC Lab</b> Assembly 3D</h2>
+    <p>Assemble a desktop PC on a 3D workbench, following a standard 7-part PC assembly lab procedure.</p>
+    <ul>
+      <li><b>Drag</b> parts and cables from the left tray onto the 3D bench. Valid drop spots light up as you hover.</li>
+      <li><b>Click</b> screws, levers, covers and switches when a step asks.</li>
+      <li><b>Click a part in the tray</b> to rotate or flip it. Pin 1, RAM notches and LED polarity matter.</li>
+      <li>The camera moves to each step automatically. Drag empty space to look around, and press <b>V</b> to snap back.</li>
+    </ul>
+    <div class="row">
+      <button class="mode" data-mode="practice"><b>🎓 Practice</b><span>Targets are always highlighted. Good for learning the procedure.</span></button>
+      <button class="mode" data-mode="challenge"><b>🏆 Challenge</b><span>No highlights. Hints cost 25 points. Best score is saved.</span></button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px" id="bestTxt"></p>
+    <p class="legal">🎓 Educational simulation · Not affiliated with Cisco · MIT License · <a href="#" onclick="document.getElementById('aboutO').classList.remove('hidden');return false">Disclaimer</a></p>
+  </div>
+</div>
+
+<div class="overlay hidden" id="endO">
+  <div class="modal">
+    <div class="post" id="post"></div>
+    <div id="res" style="display:none">
+      <div class="rank" id="rank"></div>
+      <div class="results">
+        <div><b id="rScore"></b><small>Score</small></div>
+        <div><b id="rMis"></b><small>Mistakes</small></div>
+        <div><b id="rHint"></b><small>Hints</small></div>
+        <div><b id="rTime"></b><small>Time</small></div>
+      </div>
+      <p id="rBest" style="font-size:12.5px;color:var(--muted)"></p>
+      <div class="row"><button class="primary" onclick="location.reload()">Build another</button><button onclick="document.getElementById('endO').classList.add('hidden')">Admire the build</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="aboutO">
+  <div class="modal">
+    <h2>ⓘ About <b>PC Lab Assembly</b></h2>
+    <p><b>For educational purposes only.</b> This is a practice simulation for rehearsing the steps of a PC assembly lab. It simplifies real hardware and is <b>not</b> a substitute for manufacturer documentation, your instructor, or hands-on supervised practice.</p>
+    <p>Not affiliated with, endorsed by, or sponsored by Cisco Systems, Inc. or the Cisco Networking Academy. "Cisco" is a trademark of Cisco Systems, Inc. All game text, art and code are original.</p>
+    <p>Hardware names in the game (e.g. "BENCH B75-ATX") are fictional. When working on real computers: unplug the power, use ESD protection, and follow the manufacturer's instructions.</p>
+    <p style="font-size:12.5px;color:var(--muted)">Game code © 2026 Htet Myark Aung, released under the MIT License (see <code>LICENSE</code>). Provided "as is", without warranty of any kind. 3D rendering by three.js (MIT).</p>
+    <div class="row"><button class="primary" onclick="document.getElementById('aboutO').classList.add('hidden')">Close</button></div>
+  </div>
+</div>
+<script type="module">
+/* Loader: three.js comes from the CDN (needs internet); game scripts are plain files so the page also works when opened straight from disk. */
+const FILES = ["items", "engine", "world", "technician", "game", "ui", "main"];
+try {
+  const [THREE, {OrbitControls}, {RoomEnvironment}, {RoundedBoxGeometry}] = await Promise.all([
+    import('three'), import('three/addons/controls/OrbitControls.js'),
+    import('three/addons/environments/RoomEnvironment.js'), import('three/addons/geometries/RoundedBoxGeometry.js')]);
+  Object.assign(window, {THREE, OrbitControls, RoomEnvironment, RoundedBoxGeometry});
+  for (const f of FILES) await new Promise((ok, fail) => {
+    const s = document.createElement('script'); s.src = 'assets/js/3d/' + f + '.js';
+    s.onload = ok; s.onerror = () => fail(new Error('Could not load assets/js/3d/' + f + '.js'));
+    document.body.appendChild(s);
+  });
+} catch (e) {
+  console.error(e);
+  document.getElementById('three').innerHTML = '<div class="empty" style="padding:40px">The 3D engine could not load (' + e.message + '). It needs an internet connection to fetch three.js. You can still play <a href="2d/index.html" style="color:#4fc3f7">the 2D version</a> offline.</div>';
+}
+</script>
+<script>document.getElementById("bAbout").onclick=()=>document.getElementById("aboutO").classList.remove("hidden");</script>
+</body>
+</html>

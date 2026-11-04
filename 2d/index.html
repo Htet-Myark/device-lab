@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PC Lab Assembly 2D | Educational PC Building Simulator</title>
+<link rel="stylesheet" href="../assets/css/app-2d.css">
+</head>
+<body>
+<header>
+  <h1>🛠 <b>PC Lab</b> Assembly <span style="font-size:11px;color:var(--muted)">2D</span></h1>
+  <div class="stat"><small>PART</small><span id="hPart">1/7</span></div>
+  <div class="stat"><small>STEP</small><span id="hStep">1</span></div>
+  <div class="stat"><small>TIME</small><span id="hTime">0:00</span></div>
+  <div class="stat"><small>MISTAKES</small><span id="hMis">0</span></div>
+  <div class="stat"><small>SCORE</small><span id="hScore">1000</span></div>
+  <div class="stat" id="hGround">⚡ Not grounded</div>
+  <div class="spacer"></div>
+  <button id="bHint" title="Highlight where to go (H)">💡 Hint</button>
+  <button id="bMute">🔊</button>
+  <a class="btn" href="../index.html">3D version</a>
+  <button id="bAbout">ⓘ About</button>
+  <button id="bRestart">↺ Restart</button>
+</header>
+<main>
+  <aside id="trayWrap"><h2>Parts &amp; tools</h2><div id="tray"></div></aside>
+  <section id="stage">
+    <svg id="bench" viewBox="0 0 1000 632" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="toast" id="toast"></div>
+    <div class="banner" id="banner"><div><small id="bnK"></small><b id="bnT"></b></div></div>
+  </section>
+  <aside><h2>Lab procedure</h2><ul class="parts" id="parts"></ul><div class="bar"><i id="prog"></i></div><div id="stepCard"></div></aside>
+</main>
+
+<div class="overlay" id="startO">
+  <div class="modal">
+    <h2>🛠 <b>PC Lab</b> Assembly 2D</h2>
+    <p>Assemble a desktop PC from a bare case, following a standard 7-part PC assembly lab procedure.</p>
+    <ul>
+      <li><b>Drag</b> parts and cables from the left tray onto the bench.</li>
+      <li><b>Click</b> screws, levers, covers and switches when a step asks.</li>
+      <li><b>Click a part in the tray</b> to rotate or flip it. Pin 1, RAM notches and LED polarity matter.</li>
+      <li>Doing steps out of order or making a real-world mistake costs points.</li>
+    </ul>
+    <div class="row">
+      <button class="mode" data-mode="practice"><b>🎓 Practice</b><span>Targets are always highlighted. Good for learning the procedure.</span></button>
+      <button class="mode" data-mode="challenge"><b>🏆 Challenge</b><span>No highlights. Hints cost 25 points. Best score is saved.</span></button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px" id="bestTxt"></p>
+    <p class="legal">🎓 Educational simulation · Not affiliated with Cisco · MIT License · <a href="#" onclick="document.getElementById('aboutO').classList.remove('hidden');return false">Disclaimer</a></p>
+  </div>
+</div>
+
+<div class="overlay hidden" id="endO">
+  <div class="modal">
+    <div class="post" id="post"></div>
+    <div id="res" style="display:none">
+      <div class="rank" id="rank"></div>
+      <div class="results">
+        <div><b id="rScore"></b><small>Score</small></div>
+        <div><b id="rMis"></b><small>Mistakes</small></div>
+        <div><b id="rHint"></b><small>Hints</small></div>
+        <div><b id="rTime"></b><small>Time</small></div>
+      </div>
+      <p id="rBest" style="font-size:12.5px;color:var(--muted)"></p>
+      <div class="row"><button class="primary" onclick="location.reload()">Build another</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="aboutO">
+  <div class="modal">
+    <h2>ⓘ About <b>PC Lab Assembly</b></h2>
+    <p><b>For educational purposes only.</b> This is a practice simulation for rehearsing the steps of a PC assembly lab. It simplifies real hardware and is <b>not</b> a substitute for manufacturer documentation, your instructor, or hands-on supervised practice.</p>
+    <p>Not affiliated with, endorsed by, or sponsored by Cisco Systems, Inc. or the Cisco Networking Academy. "Cisco" is a trademark of Cisco Systems, Inc. All game text, art and code are original.</p>
+    <p>Hardware names in the game (e.g. "BENCH B75-ATX") are fictional. When working on real computers: unplug the power, use ESD protection, and follow the manufacturer's instructions.</p>
+    <p style="font-size:12.5px;color:var(--muted)">Game code © 2026 Htet Myark Aung, released under the MIT License (see <code>LICENSE</code>). Provided "as is", without warranty of any kind. 3D rendering by three.js (MIT).</p>
+    <div class="row"><button class="primary" onclick="document.getElementById('aboutO').classList.add('hidden')">Close</button></div>
+  </div>
+</div>
+<script src="../assets/js/2d/items.js"></script>
+<script src="../assets/js/2d/scene.js"></script>
+<script src="../assets/js/2d/game.js"></script>
+<script src="../assets/js/2d/ui.js"></script>
+<script>document.getElementById("bAbout").onclick=()=>document.getElementById("aboutO").classList.remove("hidden");</script>
+</body>
+</html>
