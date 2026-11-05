@@ -24,6 +24,18 @@ PC Lab Assembly turns a typical "build a PC" lab into an interactive 3D workbenc
 
 It runs entirely in the browser, with no install, account or server.
 
+### Laptop Lab (`laptop.html`)
+
+A second 3D lab where you assemble a laptop in 7 parts and 39 steps. You prepare the workspace, install the system board and its ribbon cables, fit the heat pipe and fan, and add SO-DIMM memory and an M.2 SSD. Then you install the M.2 Wi-Fi card, antennas and speakers, connect the battery last, close the laptop up, turn it over and power it on. It catches laptop-specific mistakes:
+
+- a ribbon cable inserted with its contacts facing up, or into the wrong ZIF connector
+- heat-sink screws tightened out of their numbered order
+- an SO-DIMM with its notch the wrong way round
+- an SSD in the E-key Wi-Fi slot, or the Wi-Fi card in the M-key SSD slot
+- swapped MAIN/AUX antenna leads
+- fan, speaker or battery cables on the wrong header
+- the charger plugged into a data-only USB-C port
+
 ## Features
 
 - **Realistic 3D bench** built with three.js: a tower case with a glass side panel, a motherboard with readable silkscreen labels, braided cables routed through grommets, lighting, reflections and shadows.
@@ -68,7 +80,8 @@ Building a PC is a core skill in IT courses, help-desk roles and hardware certif
 | Version | Open | Needs internet? |
 |---|---|---|
 | 3D (main) | `index.html` | Yes, it loads three.js from the jsDelivr CDN |
-| 2D | `2d/index.html` | No |
+| Laptop Lab (3D) | `laptop.html` | Yes, it loads three.js from the jsDelivr CDN |
+| 2D (desktop PC only) | `2d/index.html` | No |
 
 Clone or download the repo and open the file in Chrome, Edge or Firefox. No build step, no server, no dependencies to install.
 
@@ -90,17 +103,21 @@ cd pc-lab-assembly
 
 ```
 ├── index.html              3D game (entry point)
+├── laptop.html             3D Laptop Lab (entry point)
 ├── 2d/index.html           2D game (offline)
 ├── assets/
 │   ├── css/                app.css (3D), app-2d.css (2D)
 │   ├── js/3d/              loaded in order:
-│   │   ├── items.js        parts list, tray icons, SVG gradients
+│   │   ├── common.js       DOM helpers and SVG gradients (shared with the laptop lab)
+│   │   ├── items.js        parts list, tray icons
 │   │   ├── engine.js       renderer, lights, procedural textures, materials, helpers, tweens
 │   │   ├── world.js        desk, case, PSU, motherboard, cards, drives, cables, screws
 │   │   ├── technician.js   technician figure, ESD vest, wrist strap, two-bone arm IK
 │   │   ├── game.js         camera views, the 60 steps, rules, drag/drop & click handling, hints
 │   │   ├── ui.js           tray, step card, sounds, POST screen, render loop
 │   │   └── main.js         builds the scene and starts the loop
+│   ├── js/laptop/          items.js, world.js (laptop model), game.js (39 steps), ui.js, main.js;
+│   │                       reuses 3d/common, engine, world (desk, screws) and technician
 │   └── js/2d/              items.js, scene.js, game.js, ui.js
 ├── docs/screenshots/
 ├── LICENSE
