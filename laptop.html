@@ -48,6 +48,7 @@
   <button id="bHint" title="Highlight where to go (H)">💡<span class="bt"> Hint</span></button>
   <button id="bMute">🔊</button>
   <a class="btn" href="index.html" title="Build a desktop PC instead">🖥<span class="bt"> Desktop PC</span></a>
+  <a class="btn" href="guides/assemble-a-laptop.html" title="Step-by-step written guide">📖<span class="bt"> Guide</span></a>
   <button id="bAbout" title="About, license & disclaimer">ⓘ<span class="bt"> About</span></button>
   <button id="bRestart">↺<span class="bt"> Restart</span></button>
 </header>
@@ -66,13 +67,19 @@
 <div class="overlay" id="startO">
   <div class="modal">
     <h2>💻 <b>Laptop Lab</b> Assembly 3D</h2>
-    <p>Assemble a laptop on a 3D workbench in 7 parts: the system board and ribbon cables, cooling, SO-DIMM memory, M.2 SSD and Wi-Fi, speakers and battery. Then close it up and power it on.</p>
+    <p>A free <b>3D laptop assembly simulator</b> for practising laptop repair. Assemble a laptop in 7 parts: the system board and ribbon cables, cooling, SO-DIMM memory, M.2 SSD and Wi-Fi, speakers and battery. Then close it up and power it on.</p>
     <ul>
       <li><b>Drag</b> parts and cables from the parts tray onto the 3D bench. Valid drop spots light up as you hover.</li>
       <li><b>Click / tap</b> screws, latches and modules when a step asks.</li>
       <li><b>Click / tap a part in the tray</b> to flip it. Ribbon contacts and SO-DIMM notches matter.</li>
       <li>Laptop traps to watch for: ZIF latches, heat-sink screw order, M-key vs E-key slots, MAIN/AUX antennas, the battery going in last, and which USB-C port charges.</li>
     </ul>
+    <details class="faq"><summary>Questions &amp; step-by-step guide</summary>
+      <h3>Is this laptop repair simulator free?</h3><p>Yes. It runs in your browser with no download, account or payment.</p>
+      <h3>Can I upgrade a laptop's CPU?</h3><p>Usually not: most laptop CPUs are soldered to the board. RAM (if it uses SO-DIMM slots), the M.2 SSD and the Wi-Fi card are the common upgrades, and this lab covers all three.</p>
+      <h3>Does it work on phones and tablets?</h3><p>Yes. Drag parts with your finger, pinch to zoom and drag to look around.</p>
+      <p><a href="guides/assemble-a-laptop.html">📖 Read the 39-step guide: how to assemble a laptop</a></p>
+    </details>
     <div class="row">
       <button class="mode" data-mode="practice"><b>🎓 Practice</b><span>Targets are always highlighted. Good for learning the procedure.</span></button>
       <button class="mode" data-mode="challenge"><b>🏆 Challenge</b><span>No highlights. Hints cost 25 points. Best score is saved.</span></button>

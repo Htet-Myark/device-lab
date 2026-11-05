@@ -159,3 +159,8 @@ body{-webkit-tap-highlight-color:transparent}
   .traysec{writing-mode:horizontal-tb;transform:none;margin:2px 2px 4px;font-size:9.5px}
   .viewhelp{display:none}
 }
+/* start-screen FAQ */
+.faq{margin:10px 0 4px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:#0f1720}
+.faq summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:13.5px}
+.faq h3{font-size:13.5px;margin:10px 0 2px}.faq p{font-size:13px;color:var(--muted);margin:0 0 4px}.faq a{color:var(--accent)}
+@media (max-width:560px){header a.btn[href^="guides/"]{display:none}}
