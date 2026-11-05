@@ -164,3 +164,4 @@ body{-webkit-tap-highlight-color:transparent}
 .faq summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:13.5px}
 .faq h3{font-size:13.5px;margin:10px 0 2px}.faq p{font-size:13px;color:var(--muted);margin:0 0 4px}.faq a{color:var(--accent)}
 @media (max-width:560px){header a.btn[href^="guides/"]{display:none}}
+@media (max-width:560px){header a.btn.lab{display:none}}

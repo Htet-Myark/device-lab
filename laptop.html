@@ -48,6 +48,8 @@
   <button id="bHint" title="Highlight where to go (H)">💡<span class="bt"> Hint</span></button>
   <button id="bMute">🔊</button>
   <a class="btn" href="index.html" title="Build a desktop PC instead">🖥<span class="bt"> Desktop PC</span></a>
+  <a class="btn lab" href="phone.html" title="Repair a phone">📱</a>
+  <a class="btn lab" href="tablet.html" title="Repair a tablet">📲</a>
   <a class="btn" href="guides/assemble-a-laptop.html" title="Step-by-step written guide">📖<span class="bt"> Guide</span></a>
   <button id="bAbout" title="About, license & disclaimer">ⓘ<span class="bt"> About</span></button>
   <button id="bRestart">↺<span class="bt"> Restart</span></button>
@@ -85,7 +87,7 @@
       <button class="mode" data-mode="challenge"><b>🏆 Challenge</b><span>No highlights. Hints cost 25 points. Best score is saved.</span></button>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-top:14px" id="bestTxt"></p>
-    <p class="legal">🎓 Educational simulation · Not affiliated with Cisco · MIT License · <a href="index.html">Build a desktop PC instead</a> · <a href="#" onclick="document.getElementById('aboutO').classList.remove('hidden');return false">Disclaimer</a></p>
+    <p class="legal">🎓 Educational simulation · Not affiliated with Cisco · MIT License · More labs: <a href="index.html">🖥 Desktop PC</a> · <a href="phone.html">📱 Phone</a> · <a href="tablet.html">📲 Tablet</a> · <a href="#" onclick="document.getElementById('aboutO').classList.remove('hidden');return false">Disclaimer</a></p>
   </div>
 </div>
 
@@ -118,7 +120,7 @@
 </div>
 <script type="module">
 /* Loader: three.js comes from the CDN (needs internet). The engine, desk, technician and screws are shared with the desktop lab. */
-const FILES = ["3d/common", "laptop/items", "3d/engine", "3d/world", "3d/technician", "laptop/world", "laptop/game", "laptop/ui", "laptop/main"];
+const FILES = ["3d/common", "laptop/items", "3d/engine", "3d/world", "3d/technician", "laptop/world", "laptop/game", "lab/core", "lab/ui", "laptop/main"];
 try {
   const [THREE, {OrbitControls}, {RoomEnvironment}, {RoundedBoxGeometry}] = await Promise.all([
     import('three'), import('three/addons/controls/OrbitControls.js'),

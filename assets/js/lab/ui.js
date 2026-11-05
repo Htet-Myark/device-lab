@@ -1,23 +1,19 @@
 'use strict';
-/* PC Lab Assembly: Laptop Lab | MIT License | Educational use only. See DISCLAIMER.md */
+/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== UI =================== */
 function renderTray(){
   const p=curPart();
   const list=Object.values(ITEMS).filter(it=>it.part===p&&!it.used&&!it.locked);
   const held=S.tool==='screwdriver';
   const tools=`<div class="traysec">Tools</div><div class="titem tool${held?' active':''}" id="toolSd"><div class="ic">${icon(ITEMS.screwdriver)}</div><div class="nm">${ITEMS.screwdriver.name}<small>${held?'✓ in hand · tap to put down':'tap to pick up'}</small></div></div><div class="traysec">Parts</div>`;
-  $('#tray').innerHTML=tools+(list.length?list.map(it=>`<div class="titem" data-id="${it.id}"><div class="ic">${icon(it)}</div><div class="nm">${it.name}${it.rot?'<small>↻ click to '+(it.id==='cpu'?'rotate':'flip')+'</small>':''}</div></div>`).join('')
+  $('#tray').innerHTML=tools+(list.length?list.map(it=>`<div class="titem" data-id="${it.id}"><div class="ic">${icon(it)}</div><div class="nm">${it.name}${it.rot?'<small>↻ click to '+(it.rotLabel||'flip')+'</small>':''}</div></div>`).join('')
     :`<div class="empty">Nothing to drag for this step. Follow the instruction on the right.</div>`);
   $$('#tray .titem[data-id]').forEach(n=>n.addEventListener('pointerdown',e=>startDrag(e,n.dataset.id,'tray')));
   $('#toolSd').addEventListener('click',()=>toggleDriver());
 }
-const FIGS={
-  ribbon:`<svg viewBox="0 0 260 80" width="100%"><rect x="10" y="44" width="70" height="16" fill="#2a2d33"/><g fill="#e6b83c">${[...Array(10)].map((_,k)=>`<rect x="${14+k*6.5}" y="54" width="3" height="5"/>`).join("")}</g><rect x="10" y="14" width="70" height="12" fill="#d9a441"/><g fill="#f7de8a">${[...Array(10)].map((_,k)=>`<rect x="${14+k*6.5}" y="24" width="3" height="3"/>`).join("")}</g><path d="M45 30v10" stroke="#66bb6a" stroke-width="2"/><path d="M41 37l4 5 4-5" fill="#66bb6a"/><text x="92" y="22" fill="#dce6f2" font-size="11.5">Ribbon: gold contacts face DOWN</text><text x="92" y="56" fill="#ffca28" font-size="11.5">ZIF connector: pins face UP</text><text x="92" y="74" fill="#8a9bb0" font-size="10.5">Open the latch first, close it after.</text></svg>`,
-  ram:`<svg viewBox="0 0 260 70" width="100%"><rect x="10" y="10" width="160" height="22" fill="#1f6b3a"/><rect x="10" y="28" width="160" height="5" fill="#d4af37"/><rect x="58" y="28" width="7" height="6" fill="#0b1118"/><rect x="10" y="42" width="160" height="12" fill="#2a2d33"/><rect x="59" y="38" width="5" height="6" fill="#ffca28"/><text x="180" y="26" fill="#dce6f2" font-size="11">notch</text><text x="180" y="52" fill="#ffca28" font-size="11">slot key</text><text x="10" y="68" fill="#8a9bb0" font-size="10.5">The key is off-centre: the notch must match it.</text></svg>`,
-};
 function render(){
   const st=cur(), p=curPart();
-  $('#hPart').textContent=`${p}/7`;
+  $('#hPart').textContent=`${p}/${PARTS.length}`;
   $('#hStep').textContent=`${Math.min(S.i+1,STEPS.length)}/${STEPS.length}`;
   $('#hMis').textContent=S.mistakes; $('#hScore').textContent=score();
   const g=$('#hGround'); g.textContent=S.grounded?'⚡ Grounded':'⚡ Not grounded'; g.classList.toggle('grounded',S.grounded);
@@ -29,7 +25,7 @@ function render(){
     let h=`<div class="card"><div class="k">Part ${st.p} · Step ${stepNo} of ${tot}</div><h3>${val(st.title)}</h3><p>${val(st.text)}</p>`;
     if(st.type==='screws'||(st.type==='click'&&st.targets.length>1)) h+=`<p style="color:var(--muted);font-size:12px">${st.clicked.size} / ${st.targets.length} done</p>`;
     if(needsDriver(st)) h+=`<p style="font-size:12.5px;color:${S.tool==='screwdriver'?'#66bb6a':'#ffca28'}">${S.tool==='screwdriver'?'🪛 Screwdriver in hand':'🪛 Needs the screwdriver. Tap it in the Tools tray first.'}</p>`;
-    if(st.fig) h+=`<div class="fig">${FIGS[st.fig]}</div>`;
+    if(st.fig) h+=`<div class="fig">${LAB.figs[st.fig]}</div>`;
     if(st.type==='button') h+=`<button class="primary" id="stepBtn">${st.label}</button>`;
     if(st.note) h+=`<div class="note">⚠ Note: ${st.note}</div>`;
     $('#stepCard').innerHTML=h+'</div>';
@@ -74,8 +70,8 @@ function showResults(){
   const rank=sc>=950?'🏅 Master Technician':sc>=820?'🎖 Certified Technician':sc>=650?'🔧 Apprentice Technician':'🧯 Needs Supervision';
   $('#rank').textContent=rank; $('#rScore').textContent=sc; $('#rMis').textContent=S.mistakes; $('#rHint').textContent=S.mode==='practice'?'—':S.hints; $('#rTime').textContent=fmt(t);
   let msg=`Mode: ${S.mode}.`;
-  if(S.mode==='challenge'){const b=JSON.parse(localStorage.getItem('benchbuild-laptop-best')||'null');
-    if(!b||sc>b.score||(sc===b.score&&t<b.time)){localStorage.setItem('benchbuild-laptop-best',JSON.stringify({score:sc,time:t}));msg+=' 🎉 New best score!'}
+  if(S.mode==='challenge'){const b=JSON.parse(localStorage.getItem(LAB.bestKey)||'null');
+    if(!b||sc>b.score||(sc===b.score&&t<b.time)){localStorage.setItem(LAB.bestKey,JSON.stringify({score:sc,time:t}));msg+=' 🎉 New best score!'}
     else msg+=` Best: ${b.score} in ${fmt(b.time)}.`}
   $('#rBest').textContent=msg; $('#res').style.display='block';
 }
@@ -91,7 +87,7 @@ function loop(){
     if(o.userData.screw){o.userData.screw.halo.material.opacity=.45+.45*pulse}});
   ZONES.forEach(z=>{if(z.mesh.material.opacity>0&&z!==overZone)z.mesh.material.opacity=.12+.12*pulse});
   const fl=now<FLASH.until;CABLES.forEach(c=>{if(c.material&&c.material.emissive)c.material.emissive.setRGB(0,fl?.25*pulse:0,0)});
-  if(S.powered)OBJ.lFan.rotation.y+=dt*30;
+  LAB.tick&&LAB.tick(dt,now);
   updateTech(Math.min(dt,.05),now);
   controls.update(); renderer.render(scene,camera);
 }
@@ -99,11 +95,11 @@ function loop(){
 /* =================== START =================== */
 function start(mode){
   S.mode=mode;
-  ITEMS.kbRibbon.o=1; ITEMS.tpRibbon.o=Math.round(Math.random()); ITEMS.ram1.o=1; ITEMS.ram2.o=Math.round(Math.random());
+  LAB.start&&LAB.start();
   $('#bHint').style.display=mode==='practice'?'none':'';
   $('#startO').classList.add('hidden');
   S.t0=Date.now(); S.timer=setInterval(()=>$('#hTime').textContent=fmt(elapsed()),1000);
   enterStep(); render(); banner('Part 1',PARTS[0]);
 }
 $$('.mode').forEach(b=>b.onclick=()=>start(b.dataset.mode));
-(()=>{const b=JSON.parse(localStorage.getItem('benchbuild-laptop-best')||'null');if(b)$('#bestTxt').textContent=`Challenge best: ${b.score} pts in ${fmt(b.time)}`})();
+(()=>{const b=JSON.parse(localStorage.getItem(LAB.bestKey)||'null');if(b)$('#bestTxt').textContent=`Challenge best: ${b.score} pts in ${fmt(b.time)}`})();

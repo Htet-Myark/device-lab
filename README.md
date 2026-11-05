@@ -36,6 +36,15 @@ A second 3D lab where you assemble a laptop in 7 parts and 39 steps. You prepare
 - fan, speaker or battery cables on the wrong header
 - the charger plugged into a data-only USB-C port
 
+### Phone Lab (`phone.html`) and Tablet Lab (`tablet.html`)
+
+Two more 3D labs, 6 parts and 28 steps each. You fit the logic board, cameras, charging port and speakers, lay the battery on new adhesive strips, then connect the display (phone) or the LCD and front-glass digitizer (tablet) to the board with press-fit connectors. You connect the battery last, fit the connector shield, close the display like a book and run the self-test. They catch:
+
+- a flex cable pressed onto the wrong board connector
+- the battery fitted before its adhesive strips
+- a 3.6 mm screw where a 1.2 mm screw belongs ("long screw damage")
+- an upside-down SIM tray (phone)
+
 ## Features
 
 - **Realistic 3D bench** built with three.js: a tower case with a glass side panel, a motherboard with readable silkscreen labels, braided cables routed through grommets, lighting, reflections and shadows.
@@ -81,6 +90,8 @@ Building a PC is a core skill in IT courses, help-desk roles and hardware certif
 |---|---|---|
 | 3D (main) | `index.html` | Yes, it loads three.js from the jsDelivr CDN |
 | Laptop Lab (3D) | `laptop.html` | Yes, it loads three.js from the jsDelivr CDN |
+| Phone Lab (3D) | `phone.html` | Yes, it loads three.js from the jsDelivr CDN |
+| Tablet Lab (3D) | `tablet.html` | Yes, it loads three.js from the jsDelivr CDN |
 | 2D (desktop PC only) | `2d/index.html` | No |
 
 Clone or download the repo and open the file in Chrome, Edge or Firefox. No build step, no server, no dependencies to install.
@@ -104,6 +115,8 @@ cd pc-lab-assembly
 ```
 ├── index.html              3D game (entry point)
 ├── laptop.html             3D Laptop Lab (entry point)
+├── phone.html, tablet.html 3D Phone and Tablet Labs (entry points; set window.DEVICE)
+├── guides/                 written step-by-step guides (PC, laptop)
 ├── 2d/index.html           2D game (offline)
 ├── assets/
 │   ├── css/                app.css (3D), app-2d.css (2D)
@@ -116,8 +129,11 @@ cd pc-lab-assembly
 │   │   ├── game.js         camera views, the 60 steps, rules, drag/drop & click handling, hints
 │   │   ├── ui.js           tray, step card, sounds, POST screen, render loop
 │   │   └── main.js         builds the scene and starts the loop
-│   ├── js/laptop/          items.js, world.js (laptop model), game.js (39 steps), ui.js, main.js;
-│   │                       reuses 3d/common, engine, world (desk, screws) and technician
+│   ├── js/lab/             core.js (step flow, drag & drop, hints) and ui.js (tray, step card, results, loop),
+│   │                       shared by the laptop, phone and tablet labs
+│   ├── js/laptop/          items.js, world.js (laptop model), game.js (39 steps), main.js
+│   ├── js/mobile/          items.js, world.js, game.js, main.js: one codebase for the phone and tablet labs
+│   │                       (all of these also reuse 3d/common, engine, world (desk, screws) and technician)
 │   └── js/2d/              items.js, scene.js, game.js, ui.js
 ├── docs/screenshots/
 ├── LICENSE

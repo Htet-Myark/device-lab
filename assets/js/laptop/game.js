@@ -20,22 +20,11 @@ const VIEWS={
   open:()=>[V3(68,34,66),V3(68,8,6)],
   side:()=>[V3(100,9,20),V3(84,1.6,8.8)],
 };
-let curView='overview';
-function goView(name,dur=900){
-  if(!VIEWS[name]) return; curView=name;
-  const [p,t]=VIEWS[name](); const p0=camera.position.clone(),t0=controls.target.clone();
-  tween(dur,k=>{camera.position.lerpVectors(p0,p,k);controls.target.lerpVectors(t0,t,k)},null,'cam');
-}
-
 /* =================== GAME STATE / STEPS =================== */
 const S={mode:'practice',i:0,mistakes:0,hints:0,t0:0,timer:null,grounded:false,ram:[],lastRam:0,muted:false,done:false,powered:false,flipped:false};
 const PARTS=['Prepare the workspace','Install the system board','Install the cooling system','Install memory & storage','Install wireless & audio','Install the battery','Close up & power on'];
 const PART_VIEW={1:'mat',2:'board',3:'cpu',4:'ram',5:'m2',6:'battery',7:'laptop'};
 const ESD_ITEMS=['mobo','ram1','ram2','ssd','wifi'];
-const val=v=>typeof v==='function'?v():v;
-const cur=()=>STEPS[S.i];
-const curPart=()=>cur()?cur().p:7;
-function unlock(id){ITEMS[id].locked=false}
 
 const ribbonCheck=id=>()=>ITEMS[id].o!==0?'The contacts are facing up! A ribbon inserted upside down makes no contact, so the keyboard or touchpad will be dead. Click the cable in the tray to flip it, gold contacts down.':null;
 function ramCheck(id){return z=>{if(z.dataset.full)return 'That slot already has a module in it.';if(ITEMS[id].o!==0)return 'The notch doesn\'t line up with the key in the slot. Flip the module (click it in the tray). Never force a SO-DIMM in backwards.'}}
@@ -87,7 +76,7 @@ const STEPS=[
  {p:7,type:'click',view:'cover',targets:['coverGhost'],title:'Fit the bottom cover',text:'Click the outline to put the bottom cover on. Press around the edges so all the clips engage.',done:pressCover},
  {p:7,type:'screws',view:'laptop',pts:()=>COVER_SCREWS.map(([x,z])=>[L(x,2.45,z),'y']),title:'Secure the bottom cover',text:'Fasten the bottom cover screws.'},
  {p:7,type:'click',view:'laptop',targets:['laptopHit'],onStart:()=>show('laptopHit'),title:'Turn the laptop over',text:'Click the laptop to turn it right side up and open the lid.',done:()=>{S.flipped=true;flipLaptop(()=>goView('side'))}},
- {p:7,type:'drag',item:'charger',zones:['usbcPD'],view:'side',wrong:{usbcData:'This USB-C port has no ⚡ symbol, so it carries data only and won\'t charge the laptop. Use the port marked with the lightning bolt.',hdmi:'That\'s the HDMI video output.',usbA:'That\'s a USB-A data port. The adapter plugs into the USB-C port marked ⚡.'},title:'Connect the power adapter',text:'Plug the USB-C power adapter into the USB-C port marked <b>⚡</b> (Power Delivery). Not every USB-C port can charge.',done:(z,it)=>plugCharger(z)},
+ {p:7,type:'drag',item:'charger',zones:['usbcPD'],view:'side',onStart:()=>setTimeout(portLabels,2800),wrong:{usbcData:'This USB-C port has no ⚡ symbol, so it carries data only and won\'t charge the laptop. Use the port marked with the lightning bolt.',hdmi:'That\'s the HDMI video output.',usbA:'That\'s a USB-A data port. The adapter plugs into the USB-C port marked ⚡.'},title:'Connect the power adapter',text:'Plug the USB-C power adapter into the USB-C port marked <b>⚡</b> (Power Delivery). Not every USB-C port can charge.',done:(z,it)=>plugCharger(z)},
  {p:7,type:'click',view:'open',targets:['pwrBtnL'],title:'Power on & verify',text:'Press the power button above the keyboard and watch the POST on the screen.',done:powerOn},
 ];
 const PART_START={7:()=>{show('coverGhost');goView('cover')}};
@@ -125,127 +114,11 @@ function powerOn(){
   const lines=POST_LINES().slice(0,-1);let k=0;
   setTimeout(()=>{const tick=()=>{if(k<lines.length){k++;drawScreen(lines.slice(0,k));setTimeout(tick,150)}};tick()},1100);
 }
-const FLASH={until:0};
-
-/* =================== STEP ENTRY =================== */
-function enterStep(){
-  const st=cur(); if(!st) return;
-  st.clicked=new Set();
-  if(st.tgt) st.targets=st.tgt();
-  if(st.type==='screws'){
-    st.targets=[];st.objs=[];
-    val(st.pts).forEach((p,k)=>{const id=`scr${S.i}_${k}`;st.targets.push(id);st.objs.push(makeScrew(p[0],p[1],p[2]||st.kind||'screw',id))});
-  }
-  st.onStart&&st.onStart();
-  goView(st.view||PART_VIEW[st.p]);
-}
-
-/* =================== FLOW =================== */
-function complete(z,it){
-  const st=cur();
-  if(z&&z.world) reachTo(z.world());
-  st.done&&st.done(z,it);
-  st.onEnd&&st.onEnd();
-  if(st.item&&ITEMS[st.item]) ITEMS[st.item].used=true;
-  sfx('ok'); toast('✓ '+val(st.title),'good');
-  const prevPart=st.p; S.i++;
-  if(!cur()) return finish();
-  if(cur().p!==prevPart){PART_START[cur().p]&&PART_START[cur().p]();banner(`Part ${cur().p}`,PARTS[cur().p-1])}
-  if(cur().item==='charger') setTimeout(portLabels,2800);
-  enterStep(); render();
-}
-function mistake(msg){S.mistakes++;sfx('bad');toast('✗ '+msg,'bad',4200);render()}
-function info(msg){sfx('tick');toast(msg,'',2600)}
-function handleDrop(id,z){
-  if(!z) return; flushTweens();
-  const zn=z.dataset.zone, st=cur(), it=ITEMS[id];
-  if(ESD_ITEMS.includes(id)&&!S.grounded) return mistake('⚡ ESD risk! Put on the antistatic wrist strap before handling the board, memory or M.2 cards.');
-  if(st.type==='drag'&&st.item===id){
-    if(st.zones.includes(zn)){const r=st.check&&st.check(z);if(r){if(r.soft)return info(r.msg);return mistake(r)}return complete(z,it)}
-    const w=st.wrong&&st.wrong[zn];
-    return w?mistake(w):info(`That's not where the ${it.name.toLowerCase()} goes.`);
-  }
-  const fut=STEPS.find((s,k)=>k>S.i&&s.item===id);
-  if(fut&&fut.zones.includes(zn)){
-    if(id==='heatsink'&&st.item==='paste') return mistake('Apply thermal compound before fitting the heat sink, or the CPU will overheat.');
-    return mistake(`Out of order! The lab procedure says to do this first: “${val(st.title)}”.`);
-  }
-  info(`That's not where the ${it.name.toLowerCase()} goes.`);
-}
-function handleClick(id,o){
-  flushTweens(); const st=cur();
-  if(id==='tool-sd') return toggleDriver();
-  if(needsDriver(st)&&st.targets.includes(id)&&!st.clicked.has(id)&&S.tool!=='screwdriver'){sfx('bad');return toast('🪛 You need the screwdriver for this. Tap it in the Tools tray (or on the desk) first.','bad',3000)}
-  if(st&&(st.type==='click'||st.type==='screws')&&st.targets.includes(id)){
-    if(st.clicked.has(id)) return;
-    if(st.order&&id!==st.targets[st.clicked.size]) return mistake(`Wrong order! Tighten screw ${st.clicked.size+1} next. Tightening the screws out of order tilts the plate, so it presses unevenly on the die and can crack it.`);
-    st.clicked.add(id);
-    if(st.type==='screws'){tightenScrew(o);sfx('tick')}
-    if(st.type!=='screws'&&!st.needsDriver) reachTo(new THREE.Box3().setFromObject(o).getCenter(V3(0,0,0)));
-    st.onEach&&st.onEach(id,o);
-    if(st.clicked.size===st.targets.length) return setTimeout(()=>complete(),st.type==='screws'?380:0);
-    if(st.onEach) sfx('tick');
-    render(); return;
-  }
-  if(id.startsWith('scr')) return;
-  info(`Not now. Current step: “${val(st.title)}”.`);
-}
-
-/* =================== POINTER: drag, drop, click =================== */
-const ray=new THREE.Raycaster(), ndc=new THREE.Vector2();
-function setRay(cx,cy){const r=renderer.domElement.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return false;ndc.set((cx-r.left)/r.width*2-1,-(cy-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera);return true}
-function zoneAt(cx,cy){if(!setRay(cx,cy))return null;const list=ZONES.filter(z=>isShown(z.mesh)).map(z=>z.mesh);const h=ray.intersectObjects(list,false);return h.length?h[0].object.userData.zone:null}
-function clickAt(cx,cy){if(!setRay(cx,cy))return null;const h=ray.intersectObjects(CLICK.filter(o=>isShown(o)),true);for(const x of h){let o=x.object;while(o&&!o.userData.click)o=o.parent;if(o)return o}return null}
-let D=null, overZone=null;
-function startDrag(e,id,src){
-  e.preventDefault();
-  D={id,src,x0:e.clientX,y0:e.clientY,moved:false,ghost:null};
-  window.addEventListener('pointermove',onMove);window.addEventListener('pointerup',onUp,{once:true});window.addEventListener('pointercancel',onCancel,{once:true});
-}
-function onCancel(){window.removeEventListener('pointermove',onMove);window.removeEventListener('pointerup',onUp);const d=D;D=null;controls.enabled=true;if(d&&d.ghost)d.ghost.remove();setOver(null)}
-function setOver(z){if(overZone===z)return;overZone=z;applyHints()}
-function onMove(e){
-  if(!D) return;
-  if(!D.moved){if(Math.hypot(e.clientX-D.x0,e.clientY-D.y0)<6)return;D.moved=true;const it=ITEMS[D.id];
-    D.ghost=document.createElement('div');D.ghost.className='ghost';D.ghost.innerHTML=icon(it)+`<span>${it.name}</span>`;document.body.appendChild(D.ghost);sfx('tick')}
-  D.ghost.style.left=e.clientX+'px';D.ghost.style.top=e.clientY+'px';
-  setOver(zoneAt(e.clientX,e.clientY));
-}
-function onUp(e){
-  window.removeEventListener('pointermove',onMove);window.removeEventListener('pointercancel',onCancel);const d=D;D=null;controls.enabled=true;if(!d)return;setOver(null);
-  if(d.moved){d.ghost.remove();handleDrop(d.id,zoneAt(e.clientX,e.clientY))}
-  else if(d.src==='tray'){const it=ITEMS[d.id];if(it.rot){it.o=(it.o+1)%it.rot;sfx('tick');renderTray();applyHints()}else info(`Drag the ${it.name.toLowerCase()} onto the 3D bench.`)}
-}
-let down=null;
-const active=new Set(); let multi=false;
-renderer.domElement.addEventListener('pointerdown',e=>{active.add(e.pointerId);if(active.size>1){multi=true;return}if(S.done)return;down={x:e.clientX,y:e.clientY}},{capture:true});
-renderer.domElement.addEventListener('pointercancel',e=>{active.delete(e.pointerId);if(!active.size){multi=false;down=null}});
-renderer.domElement.addEventListener('pointerup',e=>{
-  active.delete(e.pointerId); if(multi){if(!active.size){multi=false;down=null}return}
-  if(!down||S.done) return; const moved=Math.hypot(e.clientX-down.x,e.clientY-down.y); down=null;
-  if(moved>(e.pointerType==='touch'?12:5)||D) return;
-  const o=clickAt(e.clientX,e.clientY); if(o) handleClick(o.userData.click,o);
-});
-renderer.domElement.addEventListener('pointermove',e=>{if(D||down)return;const o=clickAt(e.clientX,e.clientY);renderer.domElement.style.cursor=o?'pointer':(S.tool?'crosshair':'')});
-
-/* =================== HINTS =================== */
-let hintSet=new Set(), hintUntil=0;
-function hintTargets(){
-  const st=cur();if(!st)return{zones:[],objs:[],tray:null};
-  const r={zones:[],objs:[],tray:null};
-  if(st.type==='drag'){r.zones=ZONES.filter(z=>st.zones.includes(z.dataset.zone)&&!z.dataset.full&&isShown(z.mesh));r.tray=st.item}
-  else if(needsDriver(st)&&S.tool!=='screwdriver'){r.objs=[OBJ.sdDesk];r.tool=true}
-  else if(st.type==='click'||st.type==='screws'){r.objs=st.targets.filter(t=>!st.clicked.has(t)).map(t=>OBJ[t]).filter(Boolean);if(st.order)r.objs=r.objs.slice(0,1)}
-  if(st.hintEls) r.objs.push(...st.hintEls().filter(Boolean));
-  return r;
-}
-function applyHints(force){
-  $$('.hint').forEach(e=>e.classList.remove('hint'));
-  ZONES.forEach(z=>z.mesh.material.opacity=0);hintSet=new Set();
-  const on=S.mode==='practice'||force||performance.now()<hintUntil;
-  if(on){const h=hintTargets();h.zones.forEach(z=>{z.mesh.material.color.set(0x4fc3f7);z.mesh.material.opacity=.2});h.objs.forEach(o=>hintSet.add(o));
-    if(h.tray){const ti=$(`.titem[data-id="${h.tray}"]`);ti&&ti.classList.add('hint')}
-    if(h.tool){const ti=$('.titem.tool');ti&&ti.classList.add('hint')}
-    const b=$('#stepBtn');if(b&&cur().type==='button')b.classList.add('hint')}
-  if(overZone){overZone.mesh.material.color.set(0x66bb6a);overZone.mesh.material.opacity=.38}
-}
+const FIGS={
+  ribbon:`<svg viewBox="0 0 260 80" width="100%"><rect x="10" y="44" width="70" height="16" fill="#2a2d33"/><g fill="#e6b83c">${[...Array(10)].map((_,k)=>`<rect x="${14+k*6.5}" y="54" width="3" height="5"/>`).join("")}</g><rect x="10" y="14" width="70" height="12" fill="#d9a441"/><g fill="#f7de8a">${[...Array(10)].map((_,k)=>`<rect x="${14+k*6.5}" y="24" width="3" height="3"/>`).join("")}</g><path d="M45 30v10" stroke="#66bb6a" stroke-width="2"/><path d="M41 37l4 5 4-5" fill="#66bb6a"/><text x="92" y="22" fill="#dce6f2" font-size="11.5">Ribbon: gold contacts face DOWN</text><text x="92" y="56" fill="#ffca28" font-size="11.5">ZIF connector: pins face UP</text><text x="92" y="74" fill="#8a9bb0" font-size="10.5">Open the latch first, close it after.</text></svg>`,
+  ram:`<svg viewBox="0 0 260 70" width="100%"><rect x="10" y="10" width="160" height="22" fill="#1f6b3a"/><rect x="10" y="28" width="160" height="5" fill="#d4af37"/><rect x="58" y="28" width="7" height="6" fill="#0b1118"/><rect x="10" y="42" width="160" height="12" fill="#2a2d33"/><rect x="59" y="38" width="5" height="6" fill="#ffca28"/><text x="180" y="26" fill="#dce6f2" font-size="11">notch</text><text x="180" y="52" fill="#ffca28" font-size="11">slot key</text><text x="10" y="68" fill="#8a9bb0" font-size="10.5">The key is off-centre: the notch must match it.</text></svg>`,
+};
+const LAB={esd:ESD_ITEMS,esdMsg:'⚡ ESD risk! Put on the antistatic wrist strap before handling the board, memory or M.2 cards.',bestKey:'benchbuild-laptop-best',figs:FIGS,
+  orderMsg:(id,st)=>id==='heatsink'&&st.item==='paste'?'Apply thermal compound before fitting the heat sink, or the CPU will overheat.':null,
+  tick:dt=>{if(S.powered)OBJ.lFan.rotation.y+=dt*30},
+  start:()=>{ITEMS.kbRibbon.o=1;ITEMS.tpRibbon.o=Math.round(Math.random());ITEMS.ram1.o=1;ITEMS.ram2.o=Math.round(Math.random())}};

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phone Lab: Free 3D Smartphone Repair Simulator</title>
+<!-- SEO -->
+<meta name="description" content="Learn smartphone repair in a free 3D simulator: logic board, cameras, press-fit connectors, battery, display adhesive and SIM tray. Runs in your browser.">
+<meta name="author" content="Htet Myark Aung">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0b0f15">
+<link rel="canonical" href="https://pc-lab-assembly.vercel.app/phone.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PC Lab Assembly">
+<meta property="og:title" content="Phone Lab: Free 3D Smartphone Repair Simulator">
+<meta property="og:description" content="Learn smartphone repair in a free 3D simulator: logic board, cameras, press-fit connectors, battery, display adhesive and SIM tray. Runs in your browser.">
+<meta property="og:url" content="https://pc-lab-assembly.vercel.app/phone.html">
+<meta property="og:image" content="https://pc-lab-assembly.vercel.app/assets/img/og-phone.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Phone Lab: 3D Smartphone Repair Simulator">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Phone Lab: Free 3D Smartphone Repair Simulator">
+<meta name="twitter:description" content="Learn smartphone repair in a free 3D simulator: logic board, cameras, press-fit connectors, battery, display adhesive and SIM tray. Runs in your browser.">
+<meta name="twitter:image" content="https://pc-lab-assembly.vercel.app/assets/img/og-phone.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":["WebApplication","LearningResource"],"name":"Phone Lab: 3D Smartphone Repair Simulator","url":"https://pc-lab-assembly.vercel.app/phone.html","description":"Learn smartphone repair in a free 3D simulator: logic board, cameras, press-fit connectors, battery, display adhesive and SIM tray. Runs in your browser.","image":"https://pc-lab-assembly.vercel.app/assets/img/og-phone.jpg","applicationCategory":"EducationalApplication","operatingSystem":"Any (runs in a web browser)","browserRequirements":"Requires JavaScript and WebGL","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"learningResourceType":"Simulation","educationalUse":"Practice","teaches":["smartphone repair","phone battery replacement","press-fit board connectors","display replacement","ESD safety"],"inLanguage":"en","license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"Htet Myark Aung"},"codeRepository":"https://github.com/Htet-Myark/pc-lab-assembly"}</script>
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+</head>
+<body>
+<svg id="defsSvg" width="0" height="0" style="position:absolute"></svg>
+<header>
+  <h1>📱 <b>Phone Lab</b><span class="bt"> Assembly</span> <span style="font-size:11px;color:var(--muted)">3D</span></h1>
+  <div class="stats">
+  <div class="stat"><small>PART</small><span id="hPart">1/6</span></div>
+  <div class="stat"><small>STEP</small><span id="hStep">1</span></div>
+  <div class="stat"><small>TIME</small><span id="hTime">0:00</span></div>
+  <div class="stat"><small>MISTAKES</small><span id="hMis">0</span></div>
+  <div class="stat"><small>SCORE</small><span id="hScore">1000</span></div>
+  <div class="stat" id="hGround">⚡ Not grounded</div>
+  <div class="stat" id="hTool">🪛 Holding screwdriver<span class="vh-mouse"> · Esc to put down</span></div>
+  </div>
+  <div class="spacer"></div>
+  <button id="bHint" title="Highlight where to go (H)">💡<span class="bt"> Hint</span></button>
+  <button id="bMute">🔊</button>
+  <a class="btn lab" href="index.html" title="Build a desktop PC instead">🖥</a>
+  <a class="btn lab" href="laptop.html" title="Assemble a laptop instead">💻</a>
+  <a class="btn lab" href="tablet.html" title="Try the tablet lab">📲</a>
+  <button id="bAbout" title="About, license & disclaimer">ⓘ<span class="bt"> About</span></button>
+  <button id="bRestart">↺<span class="bt"> Restart</span></button>
+</header>
+<main>
+  <aside id="trayWrap"><h2>Parts &amp; tools</h2><div id="tray"></div></aside>
+  <section id="stage">
+    <div id="three"></div>
+    <div class="viewhelp"><span class="vh-mouse">🖱 Drag empty space to orbit · right-drag to pan · scroll to zoom</span><span class="vh-touch">☝ Drag to orbit · pinch to zoom · two fingers to pan</span></div>
+    <button id="bView" title="Return the camera to this step (V)">🎥<span class="bt"> Step view</span></button>
+    <div class="toast" id="toast"></div>
+    <div class="banner" id="banner"><div><small id="bnK"></small><b id="bnT"></b></div></div>
+  </section>
+  <aside id="procWrap"><h2>Lab procedure</h2><ul class="parts" id="parts"></ul><div class="bar"><i id="prog"></i></div><div id="stepCard"></div></aside>
+</main>
+
+<div class="overlay" id="startO">
+  <div class="modal">
+    <h2>📱 <b>Phone Lab</b> Repair 3D</h2>
+    <p>A free <b>3D smartphone repair simulator</b>. Assemble a phone in 6 parts: the logic board and cameras, charging port, speaker and vibration motor, battery, display and SIM tray. Then power it on and run the self-test.</p>
+    <ul>
+      <li><b>Drag</b> parts and cables from the parts tray onto the 3D bench. Valid drop spots light up as you hover.</li>
+      <li><b>Click / tap</b> screws, the display and the power button when a step asks.</li>
+      <li><b>Click / tap a part in the tray</b> to flip it. The SIM tray only fits one way.</li>
+      <li>Phone traps to watch for: press-fit connectors on the wrong socket, the battery going in last, a long screw in a short hole, and the display adhesive.</li>
+    </ul>
+    <details class="faq"><summary>Questions</summary>
+      <h3>Is this phone repair simulator free?</h3><p>Yes. It runs in your browser with no download, account or payment.</p>
+      <h3>What is long screw damage?</h3><p>Phone screws come in very similar sizes. A screw that is too long for its hole can punch through the layers of the logic board underneath and permanently damage the phone. This lab makes you pick the right one.</p>
+      <h3>Why connect the battery last?</h3><p>A connected battery can short-circuit components while you plug in other connectors. Disconnect it first when you open a phone, and connect it last when you close one.</p>
+    </details>
+    <div class="row">
+      <button class="mode" data-mode="practice"><b>🎓 Practice</b><span>Targets are always highlighted. Good for learning the procedure.</span></button>
+      <button class="mode" data-mode="challenge"><b>🏆 Challenge</b><span>No highlights. Hints cost 25 points. Best score is saved.</span></button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px" id="bestTxt"></p>
+    <p class="legal">🎓 Educational simulation · Not affiliated with Cisco · MIT License · <a href="index.html">Build a desktop PC</a> · <a href="laptop.html">Assemble a laptop</a> · <a href="#" onclick="document.getElementById('aboutO').classList.remove('hidden');return false">Disclaimer</a></p>
+  </div>
+</div>
+
+<div class="overlay hidden" id="endO">
+  <div class="modal">
+    <div class="post" id="post"></div>
+    <div id="res" style="display:none">
+      <div class="rank" id="rank"></div>
+      <div class="results">
+        <div><b id="rScore"></b><small>Score</small></div>
+        <div><b id="rMis"></b><small>Mistakes</small></div>
+        <div><b id="rHint"></b><small>Hints</small></div>
+        <div><b id="rTime"></b><small>Time</small></div>
+      </div>
+      <p id="rBest" style="font-size:12.5px;color:var(--muted)"></p>
+      <div class="row"><button class="primary" onclick="location.reload()">Build another</button><button onclick="document.getElementById('endO').classList.add('hidden')">Admire the build</button><a class="btn" href="tablet.html">📲 Now fix a tablet</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="aboutO">
+  <div class="modal">
+    <h2>ⓘ About the <b>Phone Lab</b></h2>
+    <p><b>For educational purposes only.</b> This is a practice simulation for rehearsing the steps of a phone repair lab. It simplifies real hardware and is <b>not</b> a substitute for the manufacturer's service manual, your instructor, or hands-on supervised practice. Phone designs vary a lot, so always follow the repair guide for your model.</p>
+    <p>Not affiliated with, endorsed by, or sponsored by Cisco Systems, Inc. or the Cisco Networking Academy. "Cisco" is a trademark of Cisco Systems, Inc. All game text, art and code are original.</p>
+    <p>Hardware names in the game (e.g. "BenchPhone 6") are fictional. When working on real phones: switch the phone off, disconnect the battery first, use plastic tools on connectors and batteries, and never install a swollen battery.</p>
+    <p style="font-size:12.5px;color:var(--muted)">Game code © 2026 Htet Myark Aung, released under the MIT License (see <code>LICENSE</code>). Provided "as is", without warranty of any kind. 3D rendering by three.js (MIT).</p>
+    <div class="row"><button class="primary" onclick="document.getElementById('aboutO').classList.add('hidden')">Close</button></div>
+  </div>
+</div>
+<script>window.DEVICE='phone';</script>
+<script type="module">
+/* Loader: three.js comes from the CDN (needs internet). The engine, desk, technician and screws are shared with the desktop lab. */
+const FILES = ["3d/common", "mobile/items", "3d/engine", "3d/world", "3d/technician", "mobile/world", "mobile/game", "lab/core", "lab/ui", "mobile/main"];
+try {
+  const [THREE, {OrbitControls}, {RoomEnvironment}, {RoundedBoxGeometry}] = await Promise.all([
+    import('three'), import('three/addons/controls/OrbitControls.js'),
+    import('three/addons/environments/RoomEnvironment.js'), import('three/addons/geometries/RoundedBoxGeometry.js')]);
+  Object.assign(window, {THREE, OrbitControls, RoomEnvironment, RoundedBoxGeometry});
+  for (const f of FILES) await new Promise((ok, fail) => {
+    const s = document.createElement('script'); s.src = 'assets/js/' + f + '.js';
+    s.onload = ok; s.onerror = () => fail(new Error('Could not load assets/js/' + f + '.js'));
+    document.body.appendChild(s);
+  });
+} catch (e) {
+  console.error(e);
+  document.getElementById('three').innerHTML = '<div class="empty" style="padding:40px">The 3D engine could not load (' + e.message + '). It needs an internet connection to fetch three.js.</div>';
+}
+</script>
+<script>document.getElementById("bAbout").onclick=()=>document.getElementById("aboutO").classList.remove("hidden");</script>
+</body>
+</html>
