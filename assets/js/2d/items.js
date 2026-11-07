@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const NS='http://www.w3.org/2000/svg';
 const svg=$('#bench');

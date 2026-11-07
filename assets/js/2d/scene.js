@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* ---------------- SVG scene ---------------- */
 function el(tag,attrs={},parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
 function show(id){const e=document.getElementById(id);e&&e.classList.remove('off')}

@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== 3D ENGINE =================== */
 const K=0.075, T=0.16;                       // 2D layout unit -> cm, PCB thickness
 const SLOTS=[{y:215,kind:'x1',x2:95},{y:250,kind:'x16',x2:220},{y:295,kind:'x1',x2:95},{y:335,kind:'x16',x2:220}];

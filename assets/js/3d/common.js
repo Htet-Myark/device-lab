@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* Shared by the desktop and laptop labs: DOM helpers and the SVG gradients/patterns used by tray icons. */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 

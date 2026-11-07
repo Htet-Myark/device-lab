@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== BUILD THE DEVICE ===================
    Everything lives in LG on the antistatic mat. Local units are cm, y is up.
    The device lies on its back with the front open; the display is added last and

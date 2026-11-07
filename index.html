@@ -3,30 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PC Lab Assembly: Free 3D PC Building Simulator</title>
+<title>Device Lab: Free 3D PC Building Simulator</title>
 <!-- SEO -->
-<meta name="description" content="Learn to build a desktop PC in a free 3D simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.">
+<meta name="description" content="Learn to build a desktop PC in a free 3D PC assembly simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.">
 <meta name="author" content="Htet Myark Aung">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0b0f15">
-<link rel="canonical" href="https://pc-lab-assembly.vercel.app/">
+<link rel="canonical" href="https://device-lab-3d.vercel.app/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="PC Lab Assembly">
-<meta property="og:title" content="PC Lab Assembly: Free 3D PC Building Simulator">
-<meta property="og:description" content="Learn to build a desktop PC in a free 3D simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.">
-<meta property="og:url" content="https://pc-lab-assembly.vercel.app/">
-<meta property="og:image" content="https://pc-lab-assembly.vercel.app/assets/img/og-desktop.jpg">
+<meta property="og:site_name" content="Device Lab">
+<meta property="og:title" content="Device Lab: Free 3D PC Building Simulator">
+<meta property="og:description" content="Learn to build a desktop PC in a free 3D PC assembly simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.">
+<meta property="og:url" content="https://device-lab-3d.vercel.app/">
+<meta property="og:image" content="https://device-lab-3d.vercel.app/assets/img/og-desktop.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="PC Lab Assembly: 3D PC Building Simulator">
+<meta property="og:image:alt" content="Device Lab: 3D PC Building Simulator">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PC Lab Assembly: Free 3D PC Building Simulator">
-<meta name="twitter:description" content="Learn to build a desktop PC in a free 3D simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.">
-<meta name="twitter:image" content="https://pc-lab-assembly.vercel.app/assets/img/og-desktop.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":["WebApplication","LearningResource"],"name":"PC Lab Assembly: 3D PC Building Simulator","url":"https://pc-lab-assembly.vercel.app/","description":"Learn to build a desktop PC in a free 3D simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.","image":"https://pc-lab-assembly.vercel.app/assets/img/og-desktop.jpg","applicationCategory":"EducationalApplication","operatingSystem":"Any (runs in a web browser)","browserRequirements":"Requires JavaScript and WebGL","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"learningResourceType":"Simulation","educationalUse":"Practice","teaches":["PC assembly","ESD safety","CPU and RAM installation","power supply installation","motherboard connectors","cable management"],"inLanguage":"en","license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"Htet Myark Aung"},"codeRepository":"https://github.com/Htet-Myark/pc-lab-assembly"}</script>
+<meta name="twitter:title" content="Device Lab: Free 3D PC Building Simulator">
+<meta name="twitter:description" content="Learn to build a desktop PC in a free 3D PC assembly simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.">
+<meta name="twitter:image" content="https://device-lab-3d.vercel.app/assets/img/og-desktop.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":["WebApplication","LearningResource"],"name":"Device Lab: 3D PC Building Simulator","alternateName":["PC Lab Assembly","Device Lab 3D"],"url":"https://device-lab-3d.vercel.app/","description":"Learn to build a desktop PC in a free 3D PC assembly simulator. Install the CPU, RAM, PSU, drives and cables, and see why each mistake matters. Runs in your browser.","image":"https://device-lab-3d.vercel.app/assets/img/og-desktop.jpg","applicationCategory":"EducationalApplication","operatingSystem":"Any (runs in a web browser)","browserRequirements":"Requires JavaScript and WebGL","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"learningResourceType":"Simulation","educationalUse":"Practice","teaches":["PC assembly","ESD safety","CPU and RAM installation","power supply installation","motherboard connectors","cable management"],"inLanguage":"en","license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"Htet Myark Aung"},"codeRepository":"https://github.com/Htet-Myark/device-lab"}</script>
 <link rel="stylesheet" href="assets/css/app.css">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
@@ -34,7 +34,7 @@
 <body>
 <svg id="defsSvg" width="0" height="0" style="position:absolute"></svg>
 <header>
-  <h1>🛠 <b>PC Lab</b><span class="bt"> Assembly</span> <span style="font-size:11px;color:var(--muted)">3D</span></h1>
+  <h1>🛠 <b>Device Lab</b><span class="bt"> · PC</span> <span style="font-size:11px;color:var(--muted)">3D</span></h1>
   <div class="stats">
   <div class="stat"><small>PART</small><span id="hPart">1/7</span></div>
   <div class="stat"><small>STEP</small><span id="hStep">1</span></div>
@@ -69,7 +69,7 @@
 
 <div class="overlay" id="startO">
   <div class="modal">
-    <h2>🛠 <b>PC Lab</b> Assembly 3D</h2>
+    <h2>🛠 <b>Device Lab</b> · PC Assembly 3D</h2>
     <p>A free <b>3D PC building simulator</b>. Assemble a desktop PC on a virtual workbench, following a standard 7-part PC assembly lab procedure, and learn why each mistake matters before you touch real hardware.</p>
     <ul>
       <li><b>Drag</b> parts and cables from the parts tray onto the 3D bench. Valid drop spots light up as you hover.</li>
@@ -111,7 +111,7 @@
 
 <div class="overlay hidden" id="aboutO">
   <div class="modal">
-    <h2>ⓘ About <b>PC Lab Assembly</b></h2>
+    <h2>ⓘ About <b>Device Lab</b></h2>
     <p><b>For educational purposes only.</b> This is a practice simulation for rehearsing the steps of a PC assembly lab. It simplifies real hardware and is <b>not</b> a substitute for manufacturer documentation, your instructor, or hands-on supervised practice.</p>
     <p>Not affiliated with, endorsed by, or sponsored by Cisco Systems, Inc. or the Cisco Networking Academy. "Cisco" is a trademark of Cisco Systems, Inc. All game text, art and code are original.</p>
     <p>Hardware names in the game (e.g. "BENCH B75-ATX") are fictional. When working on real computers: unplug the power, use ESD protection, and follow the manufacturer's instructions.</p>

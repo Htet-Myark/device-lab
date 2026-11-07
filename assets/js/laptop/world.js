@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly: Laptop Lab | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab: Laptop Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== BUILD THE LAPTOP ===================
    Everything lives in LG, a group sitting on the antistatic mat. Local units are cm, y is up.
    The base starts upside down with the lid closed underneath it, so the inside faces the camera.

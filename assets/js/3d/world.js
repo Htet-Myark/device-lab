@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== BUILD THE WORLD =================== */
 const caseG=new THREE.Group();scene.add(caseG);
 function buildDesk(){

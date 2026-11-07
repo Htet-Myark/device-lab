@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== CAMERA VIEWS =================== */
 const at=(t,dx,dy,dz)=>[t.clone().add(V3(dx,dy,dz)),t];
 const SC=DL.sc, HW=DL.hw, HL=DL.hl, [B0,B1,B2,B3]=DL.batt;

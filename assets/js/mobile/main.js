@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== MAIN =================== */
 buildDesk(); buildDevice(); buildTech();
 loop();

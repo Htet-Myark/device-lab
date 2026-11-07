@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly: Laptop Lab | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab: Laptop Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== CAMERA VIEWS =================== */
 const at=(t,dx,dy,dz)=>[t.clone().add(V3(dx,dy,dz)),t];
 const VIEWS={

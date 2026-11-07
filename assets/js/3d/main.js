@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== MAIN =================== */
 buildDesk(); buildCase(); buildPSU(); buildMB(); buildTech(); setVoltVisual();
 loop();

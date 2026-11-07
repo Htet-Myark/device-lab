@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly: Laptop Lab | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab: Laptop Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* ---------------- items ---------------- */
 const ITEMS={
   vest:{name:'ESD vest (smock)',part:1},

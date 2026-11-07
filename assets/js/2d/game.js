@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* ---------------- step helpers ---------------- */
 function setLever(open){
   $('#leverBar').setAttribute('transform',open?'rotate(65 207 134)':'');
