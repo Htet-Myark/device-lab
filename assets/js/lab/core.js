@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* Shared lab engine: step flow, drag & drop, clicks and hints.
    Each lab defines VIEWS, S, PARTS, PART_VIEW, PART_START, STEPS and a LAB object of hooks before this file loads:
    LAB.esd (items that need grounding), LAB.orderMsg(id,step) (special out-of-order message), LAB.bestKey, LAB.figs, LAB.tick(dt), LAB.start(). */

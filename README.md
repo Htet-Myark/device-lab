@@ -1,4 +1,4 @@
-# 🛠 PC Lab Assembly
+# 🛠 Device Lab
 
 **A browser-based 3D simulator for practising PC assembly step by step, before you touch real hardware.**
 
@@ -12,7 +12,7 @@
 
 ## What it is
 
-PC Lab Assembly turns a typical "build a PC" lab into an interactive 3D workbench. You assemble a desktop computer in 7 parts and 60 steps:
+Device Lab turns a typical "build a PC" lab into an interactive 3D workbench. You assemble a desktop computer in 7 parts and 60 steps:
 
 1. **Install the power supply.** Remove the side panel, mount and screw in the PSU, and set the voltage selector for your country.
 2. **Install the motherboard.** Put on an ESD vest and wrist strap. Install the CPU (match Pin 1), thermal paste, cooler and RAM on the antistatic mat, then fit the standoffs and I/O shield, and mount the board.
@@ -97,8 +97,8 @@ Building a PC is a core skill in IT courses, help-desk roles and hardware certif
 Clone or download the repo and open the file in Chrome, Edge or Firefox. No build step, no server, no dependencies to install.
 
 ```bash
-git clone https://github.com/Htet-Myark/pc-lab-assembly.git
-cd pc-lab-assembly
+git clone https://github.com/Htet-Myark/device-lab.git
+cd device-lab
 # then open index.html in your browser
 ```
 

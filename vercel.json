@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "pc-lab-assembly.vercel.app" }],
+      "destination": "https://device-lab-3d.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
+}

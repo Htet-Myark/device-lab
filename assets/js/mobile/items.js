@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab: Phone & Tablet Labs | MIT License | Educational use only. See DISCLAIMER.md */
 /* The page sets window.DEVICE to 'phone' or 'tablet' before the scripts load. */
 const DEVICE=window.DEVICE==='tablet'?'tablet':'phone';
 const IS_TAB=DEVICE==='tablet';

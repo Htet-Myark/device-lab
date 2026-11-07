@@ -2,7 +2,7 @@
 
 ## Educational purpose only
 
-PC Lab Assembly is a practice simulation for learning and rehearsing the steps of a PC assembly lab. It is not a certification tool or an official course resource, and it does not replace instructor supervision.
+Device Lab is a practice simulation for learning and rehearsing the steps of a PC assembly lab. It is not a certification tool or an official course resource, and it does not replace instructor supervision.
 
 ## Not affiliated with Cisco
 

@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* ---------------- items ---------------- */
 const ITEMS={
   psu:{name:'Power supply (ATX)',part:1},

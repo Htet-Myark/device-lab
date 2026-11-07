@@ -1,5 +1,5 @@
 'use strict';
-/* PC Lab Assembly | MIT License | Educational use only. See DISCLAIMER.md */
+/* Device Lab | MIT License | Educational use only. See DISCLAIMER.md */
 /* =================== CAMERA VIEWS =================== */
 const VIEWS={
   overview:()=>[V3(42,62,112),V3(42,20,0)],
